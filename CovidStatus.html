@@ -1,0 +1,72 @@
+<html>
+<head>
+<title>Covid Cases Details</title>
+</head>
+<body>
+<center>
+<h1  style="color:greenyellow;font-size: 59px;">Covid Status</h1>
+<input type="text" name="" id="details" placeholder=" Enter country name" style="width: 39%;height: 24px; border: 2px solid #4a03f5 ;border-radius: 66px ;text-align: -webkit-center;"  onkeyup="search()"><br></br>
+<table id='table' border="3" style="width:100% ; height:70px ;border: 3px solid #0359f1; text-align:center">
+<tr class="header">
+<th data-colname="name" style="width:40%;color:greenyellow ; width:50% ; padding: 15px ;font-size: 20px;background-color: lightgrey;"> COUNTRY</th>
+<th data-colname="confirmed"  style="color:greenyellow;font-size: 20px;background-color: lightgrey;">CONFIRMED </th>
+<th data-colname="deaths"  style="color:greenyellow;font-size: 20px;background-color: lightgrey;">DEATHS </th>
+<th data-colname="recovered" style="color:greenyellow;font-size: 20px;background-color: lightgrey;">RECOVERED </th>
+</tr>
+</table>
+</center>
+<script>
+var obj;
+function load()
+{
+	fetch("https://api.covid19api.com/summary")
+	.then(result=>result.json())
+	.then(json=>show(json.Countries))
+}
+function show(Count){
+	let table=document.getElementById('table');
+	for(let i=0; i< Count.length ;i++)
+	{
+		obj=Count[i];
+		let row=document.createElement('tr');
+		let name=document.createElement('td');
+		let conf=document.createElement('td');
+		let death=document.createElement('td');
+		let recover=document.createElement('td');
+		name.innerHTML=obj.Country
+		conf.innerHTML=obj.TotalConfirmed
+		death.innerHTML=obj.TotalDeaths
+		recover.innerHTML=obj.TotalRecovered
+		row.appendChild(name)
+		row.appendChild(conf)
+		row.appendChild(death)
+		row.appendChild(recover)
+		table.appendChild(row)
+	}
+}
+window.onload=load
+
+const search=()=>{
+	let filter=document.getElementById('details').value.toUpperCase();
+	let mytable=document.getElementById('table');
+	let tr=table.getElementsByTagName('tr');
+	for(var j=0; j<tr.length;j++)
+	{
+		let td=tr[j].getElementsByTagName('td')[0];
+		if(td)
+		{
+			let textvalue=td.textcontent||td.innerHTML;
+			if(textvalue.toUpperCase().indexOf(filter)>-1)
+			{
+				tr[j].style.display="";
+			}
+			else
+			{
+				tr[j].style.display="None";
+			}
+		}
+	}
+}
+ </script>
+</body>
+</html>
